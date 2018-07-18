@@ -24,6 +24,14 @@ app.get('/about',function(req,res){
         pageTestScript:'/qa/tests-about.js'
     });
 });
+app.get('/tours/hood-river',function(req,res){
+    res.render('tours/hood-river');
+});
+
+app.get('/tours/request-group-rate',function(req,res){
+    res.render('request-group-rate');
+});
+
 // 定制404 页面
 app.use(function(req,res){
     res.status(404);
