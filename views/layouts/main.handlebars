@@ -2,28 +2,50 @@
 <html>
     <head>
         <title>Meadowlark Travel</title>
+        {{{_sections.head}}}
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="/css/main.css">
+        <script src="/vendor/js/jquery-2.1.1.min.js"></script>
+        <script src="/vendor/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
         {{#if showTests}}
             <link rel="stylesheet" href="/vendor/mocha.css">
         {{/if}}
-        <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+        <style>
+            body {
+                padding-top: 50px;
+                padding-bottom: 20px;
+            }
+        </style>
     </head>
     <body>
-        <headers><img src="/img/logo.png" alt="meadowlark Travel logo"></headers>
-        {{{body}}}
-        {{#if showTests}}
-            <div id="mocha">
-                <script src="/vendor/mocha.js"></script>
-                <script src="/vendor/chai.js"></script>
-                <script>
-                    mocha.ui('tdd');
-                    var assert=chai.assert;
-                </script>
-                <script src="/qa/tests-global.js"></script>
-                {{#if pageTestScript}}
-                    <script src="{{pageTestScript}}"></script>
-                {{/if}}
-                <script>mocha.run();</script>
-            </div>
-        {{/if}}
+        <div class="container">
+            <headers><img src="/img/logo.png" alt="meadowlark Travel logo"></headers>
+            {{{body}}}
+            {{{_sections.jquery}}}
+            
+            {{#if showTests}}
+                <div id="mocha">
+                    <script src="/vendor/mocha.js"></script>
+                    <script src="/vendor/chai.js"></script>
+                    <script>
+                        mocha.ui('tdd');
+                        var assert=chai.assert;
+                    </script>
+                    <script src="/qa/tests-global.js"></script>
+                    {{#if pageTestScript}}
+                        <script src="{{pageTestScript}}"></script>
+                    {{/if}}
+                    <script>mocha.run();</script>
+                </div>
+            {{/if}}
+            <footer>&copy;2018 Meadowlark Travel</footer>
+        </div>
+
+        <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+
     </body>
+     
 </html>
