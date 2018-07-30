@@ -1,6 +1,9 @@
 var express = require('express');
 var app = express();
 var fortune = require('./lib/fortune.js');
+var formidable = require('formidable');
+var fs =  require('fs');
+
 // 设置handlebars 视图引擎
 var handlebars = require('express3-handlebars')
     .create({
@@ -18,6 +21,7 @@ app.set('view engine','handlebars');
 app.set('port',process.env.PORT || 3000);
 
 app.use(express.static(__dirname + '/public'));
+app.use(require('body-parser')());
 
 app.use(function(req,res,next){
     res.locals.showTests = app.get('env') !== 'production' && req.query.test === '1';
@@ -94,6 +98,54 @@ app.get('/data/nursery-rhyme',function(req,res){
     });
 });
 
+app.get('/newsletter', function(req, res){
+    res.render('newsletter', { csrf: 'CSRF token goes here' });
+});
+
+app.post('/process', function(req, res){
+    console.log(req.xhr);
+    if(req.xhr || req.accepts('json,html')==='json'){
+        // if there were an error, we would send { error: 'error description' }
+
+        res.send({ success: true });
+    } else {
+        // if there were an error, we would redirect to an error page
+        res.redirect(303, '/thank-you');
+    }
+});
+
+app.get('/contest/vacation-photo',function(req,res){
+    var now = new Date();
+    res.render('contest/vacation-photo',{
+        year:now.getFullYear(),
+        month:now.getMonth()
+    });
+});
+
+app.post('/contest/vacation-photo/:year/:month',function(req,res){
+    var form = new formidable.IncomingForm();
+    form.encoding='utf-8';
+    form.keepExtensions =true;
+    form.maxFieldsSize = 2 * 1024 * 1024;
+    form.uploadDir=__dirname+'/tmp/'
+    form.parse(req,function(err,fields,files){
+        if(err) return res.redirect(303,'/error');
+        // console.log( 'received fields:' );
+        // console.log(fields);
+        // console.log('received files');
+        // console.log(files);
+
+        console.log(files.photo.path);
+        // var name = Math.floor(Math.random()* 10000).toString()+".jpg";
+        // fs.renameSync(files.photo.path,name);
+        res.redirect(303, '/thank-you');
+        
+    });
+});
+
+app.get('/thank-you', function(req, res){
+	res.render('thank-you');
+});
 // 定制404 页面
 app.use(function(req,res){
     res.status(404);
